@@ -3,35 +3,41 @@
 
 <div class="border mb-1">
     <div id="waveform"></div>
-    <div id="wave-timeline"></div>
+    @if(ShowTimeline) {
+        <div id="wave-timeline"></div>
+    }
 </div>
-<div class="bg-light mb-2">
-    <div id="wave-minimap"></div>
-</div>
-
-<div class="d-flex flex-row justify-content-between align-items-center">
-    <div>
-        <TelerikButton ThemeColor="primary" Class="mr-2" OnClick="() => PlayPause()">Přehrát / Pozastavit</TelerikButton>
+@if (ShowMinimap)
+{
+    <div class="bg-light mb-2">
+        <div id="wave-minimap"></div>
     </div>
-    <div>
-        <div class="d-flex flex-column">
-            <TelerikSlider ValueChanged="@( (int v) => interop.ZoomValueChangedHandler(v))"
-                           Min="0"
-                           Max="100"
-                           SmallStep="2"
-                           LargeStep="10"
-                           Width="250px"
-                           ShowButtons="false"
-                           TickPosition="SliderTickPosition.None">
-            </TelerikSlider>
-            <span style="text-align: center;">Zoom</span>
+}
+@if (ShowDefaultToolbar)
+{
+    <div class="d-flex flex-row justify-content-between align-items-center">
+        <div>
+            <button class="btn btn-primary mr-2" @onclick="() => PlayPause()" aria-label="Play/Pause">@TextPlayPause</button>
+        </div>
+        <div>
+            <div class="d-flex flex-row align-items-center">
+                <span class="mr-2">@TextZoom</span>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Zoom values">
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 0 ? "active":"")" @onclick="() => ZoomLevel(0)">@TextDefault</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 2 ? "active":"")" @onclick="() => ZoomLevel(2)">2x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 4 ? "active":"")" @onclick="() => ZoomLevel(4)">4x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 8 ? "active":"")" @onclick="() => ZoomLevel(8)">8x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 16 ? "active":"")" @onclick="() => ZoomLevel(16)">16x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 32 ? "active":"")" @onclick="() => ZoomLevel(32)">32x</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
+}
 
 @code {
     private WavesurferJsInterop? interop;
+    private int actualZoomLevel = 0;
 
     [Parameter]
     public EventCallback<float> OnReady { get; set; }
@@ -41,6 +47,18 @@
     public EventCallback<float> OnSeek { get; set; }
     [Parameter]
     public string Url { get; set; }
+    [Parameter]
+    public bool ShowDefaultToolbar { get; set; } = false;
+    [Parameter]
+    public bool ShowTimeline { get; set; } = true;
+    [Parameter]
+    public bool ShowMinimap { get; set; } = true;
+    [Parameter]
+    public string TextPlayPause { get; set; } = "Play/Pause";
+    [Parameter]
+    public string TextZoom { get; set; } = "Zoom";
+    [Parameter]
+    public string TextDefault { get; set; } = "Default";
 
     public async Task LoadFile(string url)
     {
@@ -55,6 +73,12 @@
     public async Task SeekTo(float seek)
     {
         await interop.SeekTo(seek);
+    }
+
+    public async Task ZoomLevel(int zoom)
+    {
+        actualZoomLevel = zoom;
+        await interop.ZoomValueChangedHandler(zoom);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

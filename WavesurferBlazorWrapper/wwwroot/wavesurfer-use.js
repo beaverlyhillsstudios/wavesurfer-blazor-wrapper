@@ -27,6 +27,16 @@ export function create(dotNetHelper) {
             dotNetHelper.invokeMethodAsync("OnWavesurferReady", wavesurfer.getDuration());
         }
     );
+    wavesurfer.on('dblclick',
+        function() {
+            dotNetHelper.invokeMethodAsync("OnWavesurferDblClick");
+        }
+    );
+    wavesurfer.on('destroy',
+        function() {
+            dotNetHelper.invokeMethodAsync("OnWavesurferDestroy");
+        }
+    );
     wavesurfer.on('audioprocess',
         function(position) {
             dotNetHelper.invokeMethodAsync("OnWavesurferAudioProcess", position);
