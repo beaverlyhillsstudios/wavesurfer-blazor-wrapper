@@ -1,0 +1,104 @@
+﻿@using Microsoft.JSInterop;
+@inject IJSRuntime _js
+
+<div class="border mb-1">
+    <div id="waveform"></div>
+    <div id="wave-timeline"></div>
+</div>
+<div class="bg-light mb-2">
+    <div id="wave-minimap"></div>
+</div>
+
+<div class="d-flex flex-row justify-content-between align-items-center">
+    <div>
+        <TelerikButton ThemeColor="primary" Class="mr-2" OnClick="() => PlayPause()">Přehrát / Pozastavit</TelerikButton>
+    </div>
+    <div>
+        <div class="d-flex flex-column">
+            <TelerikSlider ValueChanged="@( (int v) => interop.ZoomValueChangedHandler(v))"
+                           Min="0"
+                           Max="100"
+                           SmallStep="2"
+                           LargeStep="10"
+                           Width="250px"
+                           ShowButtons="false"
+                           TickPosition="SliderTickPosition.None">
+            </TelerikSlider>
+            <span style="text-align: center;">Zoom</span>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private WavesurferJsInterop? interop;
+
+    [Parameter]
+    public EventCallback<float> OnReady { get; set; }
+    [Parameter]
+    public EventCallback<float> OnAudioProcess { get; set; }
+    [Parameter]
+    public EventCallback<float> OnSeek { get; set; }
+    [Parameter]
+    public string Url { get; set; }
+
+    public async Task LoadFile(string url)
+    {
+        await interop.LoadFile(Url);
+    }
+
+    public async Task PlayPause()
+    {
+        await interop.PlayPause();
+    }
+
+    public async Task SeekTo(float seek)
+    {
+        await interop.SeekTo(seek);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //starting upon rendering target divs
+            await interop.Create();
+            
+            //preload file if URL supplied
+            if (Url != null)
+            {
+                await interop.LoadFile(Url);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavePlayer>(this));
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferReady(float duration)
+    {
+        await OnReady.InvokeAsync(duration);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferAudioProcess(float position)
+    {
+        await OnAudioProcess.InvokeAsync(position);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferSeek(float seekCoef)
+    {
+        await OnSeek.InvokeAsync(seekCoef);
+    }
+
+    public void Dispose()
+    {
+        
+    }
+}
+
+

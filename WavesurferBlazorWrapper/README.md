@@ -1,0 +1,1 @@
+﻿.NET6 Core wrapper around JS library: wavesurfer.js by katspaugh (https://wavesurfer-js.org/)
