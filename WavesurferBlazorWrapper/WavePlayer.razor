@@ -46,7 +46,7 @@
     [Parameter]
     public EventCallback<float> OnSeek { get; set; }
     [Parameter]
-    public string Url { get; set; }
+    public string? Url { get; set; }
     [Parameter]
     public bool ShowDefaultToolbar { get; set; } = false;
     [Parameter]
@@ -62,23 +62,23 @@
 
     public async Task LoadFile(string url)
     {
-        await interop.LoadFile(Url);
+        if (interop != null) await interop.LoadFile(url);
     }
 
     public async Task PlayPause()
     {
-        await interop.PlayPause();
+        if (interop != null) await interop.PlayPause();
     }
 
     public async Task SeekTo(float seek)
     {
-        await interop.SeekTo(seek);
+        if (interop != null) await interop.SeekTo(seek);
     }
 
     public async Task ZoomLevel(int zoom)
     {
         actualZoomLevel = zoom;
-        await interop.ZoomValueChangedHandler(zoom);
+        if (interop != null) await interop.ZoomValueChangedHandler(zoom);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -86,17 +86,20 @@
         if (firstRender)
         {
             //starting upon rendering target divs
-            await interop.Create();
-            
-            //preload file if URL supplied
-            if (Url != null)
+            if (interop != null)
             {
-                await interop.LoadFile(Url);
+                await interop.Create();
+
+                //preload file if URL supplied
+                if (Url != null)
+                {
+                    await interop.LoadFile(Url);
+                }
             }
         }
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavePlayer>(this));
     }

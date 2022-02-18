@@ -8,9 +8,6 @@ namespace WavesurferBlazorWrapper
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
         private readonly DotNetObjectReference<WavePlayer> _objRef;
-        private EventCallback<float> OnReady { get; set; }
-        private EventCallback<float> OnAudioProcess { get; set; }
-        private EventCallback<float> OnSeek { get; set; }
 
         public WavesurferJsInterop(IJSRuntime jsRuntime, DotNetObjectReference<WavePlayer> objRef)
         {
