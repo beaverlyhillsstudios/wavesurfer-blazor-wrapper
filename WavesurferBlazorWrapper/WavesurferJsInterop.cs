@@ -7,9 +7,9 @@ namespace WavesurferBlazorWrapper
     public class WavesurferJsInterop : IAsyncDisposable
     {
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
-        private readonly DotNetObjectReference<WavePlayer> _objRef;
+        private readonly DotNetObjectReference<WavesurferPlayer> _objRef;
 
-        public WavesurferJsInterop(IJSRuntime jsRuntime, DotNetObjectReference<WavePlayer> objRef)
+        public WavesurferJsInterop(IJSRuntime jsRuntime, DotNetObjectReference<WavesurferPlayer> objRef)
         {
             moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
                "import", "./_content/WavesurferBlazorWrapper/wavesurfer-use.js").AsTask());
@@ -22,19 +22,19 @@ namespace WavesurferBlazorWrapper
             await module.InvokeVoidAsync("create", _objRef);
         }
 
-        public async Task ZoomValueChangedHandler(int zoom)
+        public async Task Zoom(int zoom)
         {
             var module = await moduleTask.Value;
             await module.InvokeVoidAsync("zoom", zoom);
         }
 
-        public async Task LoadFile(string url)
+        public async Task Load(string url)
         {
             var module = await moduleTask.Value;
             await module.InvokeVoidAsync("load", url);
         }
 
-        public async Task SeekTo(float seekRequest)
+        public async Task Seek(float seekRequest)
         {
             var module = await moduleTask.Value;
             await module.InvokeVoidAsync("seek", seekRequest);

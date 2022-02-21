@@ -23,12 +23,12 @@
             <div class="d-flex flex-row align-items-center">
                 <span class="mr-2">@TextZoom</span>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Zoom values">
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 0 ? "active":"")" @onclick="() => ZoomLevel(0)">@TextDefault</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 2 ? "active":"")" @onclick="() => ZoomLevel(2)">2x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 4 ? "active":"")" @onclick="() => ZoomLevel(4)">4x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 8 ? "active":"")" @onclick="() => ZoomLevel(8)">8x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 16 ? "active":"")" @onclick="() => ZoomLevel(16)">16x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 32 ? "active":"")" @onclick="() => ZoomLevel(32)">32x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 0 ? "active":"")" @onclick="() => Zoom(0)">@TextDefault</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 2 ? "active":"")" @onclick="() => Zoom(2)">2x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 4 ? "active":"")" @onclick="() => Zoom(4)">4x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 8 ? "active":"")" @onclick="() => Zoom(8)">8x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 16 ? "active":"")" @onclick="() => Zoom(16)">16x</button>
+                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 32 ? "active":"")" @onclick="() => Zoom(32)">32x</button>
                 </div>
             </div>
         </div>
@@ -60,9 +60,9 @@
     [Parameter]
     public string TextDefault { get; set; } = "Default";
 
-    public async Task LoadFile(string url)
+    public async Task Load(string url)
     {
-        if (interop != null) await interop.LoadFile(url);
+        if (interop != null) await interop.Load(url);
     }
 
     public async Task PlayPause()
@@ -70,15 +70,15 @@
         if (interop != null) await interop.PlayPause();
     }
 
-    public async Task SeekTo(float seek)
+    public async Task Seek(float seek)
     {
-        if (interop != null) await interop.SeekTo(seek);
+        if (interop != null) await interop.Seek(seek);
     }
 
-    public async Task ZoomLevel(int zoom)
+    public async Task Zoom(int zoom)
     {
         actualZoomLevel = zoom;
-        if (interop != null) await interop.ZoomValueChangedHandler(zoom);
+        if (interop != null) await interop.Zoom(zoom);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -93,7 +93,7 @@
                 //preload file if URL supplied
                 if (Url != null)
                 {
-                    await interop.LoadFile(Url);
+                    await interop.Load(Url);
                 }
             }
         }
@@ -101,7 +101,7 @@
 
     protected override void OnInitialized()
     {
-        interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavePlayer>(this));
+        interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavesurferPlayer>(this));
     }
 
     [JSInvokable]
