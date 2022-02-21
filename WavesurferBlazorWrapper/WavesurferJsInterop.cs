@@ -16,10 +16,10 @@ namespace WavesurferBlazorWrapper
             _objRef = objRef;
         }
 
-        public async Task Create()
+        public async Task Create(Guid mainDivGuid, Guid timelineDivGuid, Guid minimapDivGuid)
         {
             var module = await moduleTask.Value;
-            await module.InvokeVoidAsync("create", _objRef);
+            await module.InvokeVoidAsync("create", _objRef, mainDivGuid, timelineDivGuid, minimapDivGuid);
         }
 
         public async Task Zoom(int zoom)

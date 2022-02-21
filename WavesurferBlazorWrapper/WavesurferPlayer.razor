@@ -1,25 +1,23 @@
 ﻿@using Microsoft.JSInterop;
 @inject IJSRuntime _js
 
-<div class="border mb-1">
-    <div id="waveform"></div>
+<div class="wavesurfer-ui-container">
+    <div class="wavesurfer-ui-main" id="sel_@mainDivGuid"></div>
     @if(ShowTimeline) {
-        <div id="wave-timeline"></div>
+        <div class="wavesurfer-ui-timeline" id="sel_@timelineDivGuid"></div>
+    }
+    @if (ShowMinimap)
+    {
+        <div class="wavesurfer-ui-minimap" id="sel_@minimapDivGuid"></div>
     }
 </div>
-@if (ShowMinimap)
-{
-    <div class="bg-light mb-2">
-        <div id="wave-minimap"></div>
-    </div>
-}
 @if (ShowDefaultToolbar)
 {
-    <div class="d-flex flex-row justify-content-between align-items-center">
-        <div>
+    <div class="wavesurfer-ui-toolbar d-flex flex-row justify-content-between align-items-center">
+        <div class="wavesurfer-ui-toolbar-left">
             <button class="btn btn-primary mr-2" @onclick="() => PlayPause()" aria-label="Play/Pause">@TextPlayPause</button>
         </div>
-        <div>
+        <div class="wavesurfer-ui-toolbar-right">
             <div class="d-flex flex-row align-items-center">
                 <span class="mr-2">@TextZoom</span>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Zoom values">
@@ -38,6 +36,10 @@
 @code {
     private WavesurferJsInterop? interop;
     private int actualZoomLevel = 0;
+
+    private Guid mainDivGuid;
+    private Guid timelineDivGuid;
+    private Guid minimapDivGuid;
 
     [Parameter]
     public EventCallback<float> OnReady { get; set; }
@@ -88,7 +90,7 @@
             //starting upon rendering target divs
             if (interop != null)
             {
-                await interop.Create();
+                await interop.Create(mainDivGuid, timelineDivGuid, minimapDivGuid);
 
                 //preload file if URL supplied
                 if (Url != null)
@@ -101,6 +103,9 @@
 
     protected override void OnInitialized()
     {
+        mainDivGuid = Guid.NewGuid();
+        timelineDivGuid = Guid.NewGuid();
+        minimapDivGuid = Guid.NewGuid();
         interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavesurferPlayer>(this));
     }
 

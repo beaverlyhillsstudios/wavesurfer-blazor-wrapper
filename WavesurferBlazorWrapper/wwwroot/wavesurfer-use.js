@@ -1,27 +1,30 @@
 ﻿var wavesurfer = null;
 
-export function create(dotNetHelper) {
+export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGuid) {
 
-    wavesurfer = WaveSurfer.create({
-        container: '#waveform',
+    var options = {
+        container: '#sel_' + mainDivGuid,
         waveColor: '#428bca',
         progressColor: '#00629b',
         normalize: true,
         plugins: [
             WaveSurfer.regions.create({
-                
             }),
             WaveSurfer.timeline.create({
-                container: "#wave-timeline"
+                container: '#sel_'+timelineDivGuid
             }),
             WaveSurfer.minimap.create({
-                container: '#wave-minimap',
+                container: '#sel_'+minimapDivGuid,
                 waveColor: '#777',
                 progressColor: '#222',
                 height: 40
             })
         ]
-    });
+    };
+
+    wavesurfer = WaveSurfer.create(options);
+    
+    //Events
     wavesurfer.on('ready',
         function() {
             dotNetHelper.invokeMethodAsync("OnWavesurferReady", wavesurfer.getDuration());
