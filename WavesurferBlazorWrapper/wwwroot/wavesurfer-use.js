@@ -64,7 +64,7 @@ export function zoom(zoomLevel) {
     wavesurfer.zoom(zoomLevel);
 }
 
-export function seek(seek) {
+export function seekAndCenter(seek) {
     wavesurfer.seekAndCenter(seek);
 }
 

@@ -2,31 +2,31 @@
 @inject IJSRuntime _js
 
 <div class="wavesurfer-ui-container">
-    <div class="wavesurfer-ui-main" id="sel_@mainDivGuid"></div>
+    <div class="wavesurfer-ui-main" id="sel_@_mainDivGuid"></div>
     @if(ShowTimeline) {
-        <div class="wavesurfer-ui-timeline" id="sel_@timelineDivGuid"></div>
+        <div class="wavesurfer-ui-timeline" id="sel_@_timelineDivGuid"></div>
     }
     @if (ShowMinimap)
     {
-        <div class="wavesurfer-ui-minimap" id="sel_@minimapDivGuid"></div>
+        <div class="wavesurfer-ui-minimap" id="sel_@_minimapDivGuid"></div>
     }
 </div>
 @if (ShowDefaultToolbar)
 {
     <div class="wavesurfer-ui-toolbar d-flex flex-row justify-content-between align-items-center">
         <div class="wavesurfer-ui-toolbar-left">
-            <button class="btn btn-primary mr-2" @onclick="() => PlayPause()" aria-label="Play/Pause">@TextPlayPause</button>
+            <button class="btn btn-primary mr-2" @onclick="PlayPause" aria-label="Play/Pause">@TextPlayPause</button>
         </div>
         <div class="wavesurfer-ui-toolbar-right">
             <div class="d-flex flex-row align-items-center">
                 <span class="mr-2">@TextZoom</span>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Zoom values">
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 0 ? "active":"")" @onclick="() => Zoom(0)">@TextDefault</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 2 ? "active":"")" @onclick="() => Zoom(2)">2x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 4 ? "active":"")" @onclick="() => Zoom(4)">4x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 8 ? "active":"")" @onclick="() => Zoom(8)">8x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 16 ? "active":"")" @onclick="() => Zoom(16)">16x</button>
-                    <button type="button" class="btn btn-secondary @(actualZoomLevel == 32 ? "active":"")" @onclick="() => Zoom(32)">32x</button>
+                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 0 ? "active":"")" @onclick="() => Zoom(0)">@TextDefault</button>
+                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 2 ? "active":"")" @onclick="() => Zoom(2)">2x</button>
+                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 4 ? "active":"")" @onclick="() => Zoom(4)">4x</button>
+                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 8 ? "active":"")" @onclick="() => Zoom(8)">8x</button>
+                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 16 ? "active":"")" @onclick="() => Zoom(16)">16x</button>
+                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 32 ? "active":"")" @onclick="() => Zoom(32)">32x</button>
                 </div>
             </div>
         </div>
@@ -34,15 +34,16 @@
 }
 
 @code {
-    private WavesurferJsInterop? interop;
-    private int actualZoomLevel = 0;
+    private WavesurferJsInterop? _interop;
+    private int _actualZoomLevel = 0;
 
-    private Guid mainDivGuid;
-    private Guid timelineDivGuid;
-    private Guid minimapDivGuid;
+    private Guid _mainDivGuid;
+    private Guid _timelineDivGuid;
+    private Guid _minimapDivGuid;
 
+    //Component parameters
     [Parameter]
-    public EventCallback<float> OnReady { get; set; }
+    public EventCallback OnReady { get; set; }
     [Parameter]
     public EventCallback<float> OnAudioProcess { get; set; }
     [Parameter]
@@ -62,40 +63,42 @@
     [Parameter]
     public string TextDefault { get; set; } = "Default";
 
+    //External methods
     public async Task Load(string url)
     {
-        if (interop != null) await interop.Load(url);
+        if (_interop != null) await _interop.Load(url);
     }
 
     public async Task PlayPause()
     {
-        if (interop != null) await interop.PlayPause();
+        if (_interop != null) await _interop.PlayPause();
     }
 
-    public async Task Seek(float seek)
+    public async Task SeekAndCenter(float seek)
     {
-        if (interop != null) await interop.Seek(seek);
+        if (_interop != null) await _interop.SeekAndCenter(seek);
     }
 
-    public async Task Zoom(int zoom)
+    public async Task Zoom(int pxPerSec)
     {
-        actualZoomLevel = zoom;
-        if (interop != null) await interop.Zoom(zoom);
+        _actualZoomLevel = pxPerSec;
+        if (_interop != null) await _interop.Zoom(pxPerSec);
     }
 
+    //Internal component methods
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             //starting upon rendering target divs
-            if (interop != null)
+            if (_interop != null)
             {
-                await interop.Create(mainDivGuid, timelineDivGuid, minimapDivGuid);
+                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid);
 
                 //preload file if URL supplied
                 if (Url != null)
                 {
-                    await interop.Load(Url);
+                    await _interop.Load(Url);
                 }
             }
         }
@@ -103,16 +106,22 @@
 
     protected override void OnInitialized()
     {
-        mainDivGuid = Guid.NewGuid();
-        timelineDivGuid = Guid.NewGuid();
-        minimapDivGuid = Guid.NewGuid();
-        interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavesurferPlayer>(this));
+        _mainDivGuid = Guid.NewGuid();
+        _timelineDivGuid = Guid.NewGuid();
+        _minimapDivGuid = Guid.NewGuid();
+        _interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavesurferPlayer>(this));
     }
 
-    [JSInvokable]
-    public async Task OnWavesurferReady(float duration)
+    public void Dispose()
     {
-        await OnReady.InvokeAsync(duration);
+        
+    }
+
+    //JS Events
+    [JSInvokable]
+    public async Task OnWavesurferReady()
+    {
+        await OnReady.InvokeAsync();
     }
 
     [JSInvokable]
@@ -127,10 +136,6 @@
         await OnSeek.InvokeAsync(seekCoef);
     }
 
-    public void Dispose()
-    {
-        
-    }
 }
 
 
