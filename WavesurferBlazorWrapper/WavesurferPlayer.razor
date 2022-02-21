@@ -66,23 +66,39 @@
     //External methods
     public async Task Load(string url)
     {
-        if (_interop != null) await _interop.Load(url);
+        if (_interop != null)
+        {
+            var module = await _interop.GetModuleTask();
+            await module.InvokeVoidAsync("load", url);
+        }
     }
 
     public async Task PlayPause()
     {
-        if (_interop != null) await _interop.PlayPause();
+        if (_interop != null)
+        {
+            var module = await _interop.GetModuleTask();
+            await module.InvokeVoidAsync("playPause");
+        }
     }
 
     public async Task SeekAndCenter(float seek)
     {
-        if (_interop != null) await _interop.SeekAndCenter(seek);
+        if (_interop != null)
+        {
+            var module = await _interop.GetModuleTask();
+            await module.InvokeVoidAsync("seekAndCenter", seek);
+        }
     }
 
     public async Task Zoom(int pxPerSec)
     {
         _actualZoomLevel = pxPerSec;
-        if (_interop != null) await _interop.Zoom(pxPerSec);
+        if (_interop != null)
+        {
+            var module = await _interop.GetModuleTask();
+            await module.InvokeVoidAsync("zoom", pxPerSec);
+        }
     }
 
     //Internal component methods

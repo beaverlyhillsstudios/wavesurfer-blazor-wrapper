@@ -22,28 +22,9 @@ namespace WavesurferBlazorWrapper
             await module.InvokeVoidAsync("create", _objRef, mainDivGuid, timelineDivGuid, minimapDivGuid);
         }
 
-        public async Task Zoom(int zoom)
+        public async Task<IJSObjectReference> GetModuleTask()
         {
-            var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync("zoom", zoom);
-        }
-
-        public async Task Load(string url)
-        {
-            var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync("load", url);
-        }
-
-        public async Task SeekAndCenter(float seekRequest)
-        {
-            var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync("seekAndCenter", seekRequest);
-        }
-
-        public async Task PlayPause()
-        {
-            var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync("playPause");
+            return await _moduleTask.Value;
         }
 
         public async ValueTask DisposeAsync()
