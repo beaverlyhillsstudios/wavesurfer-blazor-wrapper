@@ -13,20 +13,20 @@
 </div>
 @if (ShowDefaultToolbar)
 {
-    <div class="wavesurfer-ui-toolbar d-flex flex-row justify-content-between align-items-center">
+    <div class="wavesurfer-ui-toolbar">
         <div class="wavesurfer-ui-toolbar-left">
-            <button class="btn btn-primary mr-2" @onclick="PlayPause" aria-label="Play/Pause">@TextPlayPause</button>
+            <button @onclick="PlayPause" aria-label="Play/Pause">@TextPlayPause</button>
         </div>
         <div class="wavesurfer-ui-toolbar-right">
-            <div class="d-flex flex-row align-items-center">
-                <span class="mr-2">@TextZoom</span>
+            <div class="wavesurfer-ui-toolbar-right-container">
+                <span>@TextZoom</span>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Zoom values">
-                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 0 ? "active":"")" @onclick="() => Zoom(0)">@TextDefault</button>
-                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 2 ? "active":"")" @onclick="() => Zoom(2)">2x</button>
-                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 4 ? "active":"")" @onclick="() => Zoom(4)">4x</button>
-                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 8 ? "active":"")" @onclick="() => Zoom(8)">8x</button>
-                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 16 ? "active":"")" @onclick="() => Zoom(16)">16x</button>
-                    <button type="button" class="btn btn-secondary @(_actualZoomLevel == 32 ? "active":"")" @onclick="() => Zoom(32)">32x</button>
+                    <button type="button" class="@(_actualZoomLevel == 0 ? "active":"")" @onclick="() => Zoom(0)">@TextDefault</button>
+                    <button type="button" class="@(_actualZoomLevel == 2 ? "active":"")" @onclick="() => Zoom(2)">2x</button>
+                    <button type="button" class="@(_actualZoomLevel == 4 ? "active":"")" @onclick="() => Zoom(4)">4x</button>
+                    <button type="button" class="@(_actualZoomLevel == 8 ? "active":"")" @onclick="() => Zoom(8)">8x</button>
+                    <button type="button" class="@(_actualZoomLevel == 16 ? "active":"")" @onclick="() => Zoom(16)">16x</button>
+                    <button type="button" class="@(_actualZoomLevel == 32 ? "active":"")" @onclick="() => Zoom(32)">32x</button>
                 </div>
             </div>
         </div>
@@ -62,6 +62,15 @@
     public string TextZoom { get; set; } = "Zoom";
     [Parameter]
     public string TextDefault { get; set; } = "Default";
+    [Parameter]
+    public IEnumerable<WavesurferOption> Options { get; set; }
+
+    private List<WavesurferOption> _defaultOptions = new()
+    {
+        new WavesurferOption(WavesurferOptionKey.normalize, true),
+        new WavesurferOption(WavesurferOptionKey.progressColor, "#00629b"),
+        new WavesurferOption(WavesurferOptionKey.waveColor, "#428bca")
+    };
 
     //External methods
     public async Task Load(string url)
@@ -109,7 +118,7 @@
             //starting upon rendering target divs
             if (_interop != null)
             {
-                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid);
+                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, _defaultOptions, Options);
 
                 //preload file if URL supplied
                 if (Url != null)

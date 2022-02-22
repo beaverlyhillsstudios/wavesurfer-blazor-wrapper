@@ -16,10 +16,10 @@ namespace WavesurferBlazorWrapper
             _objRef = objRef;
         }
 
-        public async Task Create(Guid mainDivGuid, Guid timelineDivGuid, Guid minimapDivGuid)
+        public async Task Create(Guid mainDivGuid, Guid timelineDivGuid, Guid minimapDivGuid, IEnumerable<WavesurferOption> optionsDefault, IEnumerable<WavesurferOption> optionsUser)
         {
             var module = await _moduleTask.Value;
-            await module.InvokeVoidAsync("create", _objRef, mainDivGuid, timelineDivGuid, minimapDivGuid);
+            await module.InvokeVoidAsync("create", _objRef, mainDivGuid, timelineDivGuid, minimapDivGuid, WavesurferOptionsService.getObjectFromRecords(optionsDefault),WavesurferOptionsService.getObjectFromRecords(optionsUser));
         }
 
         public async Task<IJSObjectReference> GetModuleTask()
