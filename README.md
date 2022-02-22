@@ -2,6 +2,8 @@
 
 ![Nuget](https://img.shields.io/nuget/v/WavesurferBlazorWrapper) ![Nuget](https://img.shields.io/nuget/dt/WavesurferBlazorWrapper)
 
+> :warning: Package in **ACTIVE** development! API is subject to change!
+
 .NET6 Core wrapper around JS library: wavesurfer.js by **katspaugh** (https://wavesurfer-js.org/)
 
 ## Installation
@@ -9,11 +11,11 @@
 ### Package
 PackageManager
 ```
-Install-Package WavesurferBlazorWrapper -Version 0.0.2
+Install-Package WavesurferBlazorWrapper -Version 0.0.3
 ```
 or .net CLI
 ```
-dotnet add package WavesurferBlazorWrapper --version 0.0.2
+dotnet add package WavesurferBlazorWrapper --version 0.0.3
 ```
 
 ### Javascript
