@@ -23,9 +23,9 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
     wavesurfer = WaveSurfer.create(options);
     
     //Events
-    wavesurfer.on('ready',
-        function() {
-            dotNetHelper.invokeMethodAsync("OnWavesurferReady", wavesurfer.getDuration());
+    wavesurfer.on('audioprocess',
+        function(position) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferAudioProcess", position);
         }
     );
     wavesurfer.on('dblclick',
@@ -38,14 +38,64 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
             dotNetHelper.invokeMethodAsync("OnWavesurferDestroy");
         }
     );
-    wavesurfer.on('audioprocess',
-        function(position) {
-            dotNetHelper.invokeMethodAsync("OnWavesurferAudioProcess", position);
+    wavesurfer.on('error',
+        function(errorMessage) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferError", errorMessage);
+        }
+    );
+    wavesurfer.on('finish',
+        function() {
+            dotNetHelper.invokeMethodAsync("OnWavesurferFinish");
+        }
+    );
+    wavesurfer.on('interaction',
+        function() {
+            dotNetHelper.invokeMethodAsync("OnWavesurferInteraction");
+        }
+    );
+    wavesurfer.on('loading',
+        function(percent) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferLoading", percent);
+        }
+    );
+    wavesurfer.on('mute',
+        function(status) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferMute", status);
+        }
+    );
+    wavesurfer.on('pause',
+        function() {
+            dotNetHelper.invokeMethodAsync("OnWavesurferPause");
+        }
+    );
+    wavesurfer.on('play',
+        function() {
+            dotNetHelper.invokeMethodAsync("OnWavesurferPlay");
+        }
+    );
+    wavesurfer.on('ready',
+        function() {
+            dotNetHelper.invokeMethodAsync("OnWavesurferReady");
+        }
+    );
+    wavesurfer.on('scroll',
+        function(scrollEvent) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferScroll", scrollEvent);
         }
     );
     wavesurfer.on('seek',
         function(seek) {
             dotNetHelper.invokeMethodAsync("OnWavesurferSeek", seek);
+        }
+    );
+    wavesurfer.on('volume',
+        function(volume) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferVolume", volume);
+        }
+    );
+    wavesurfer.on('zoom',
+        function(minPxPerSec) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferZoom", minPxPerSec);
         }
     );
 }

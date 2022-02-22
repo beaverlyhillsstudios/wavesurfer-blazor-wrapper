@@ -43,11 +43,35 @@
 
     //Component parameters
     [Parameter]
-    public EventCallback OnReady { get; set; }
-    [Parameter]
     public EventCallback<float> OnAudioProcess { get; set; }
     [Parameter]
+    public EventCallback OnDblClick { get; set; }
+    [Parameter]
+    public EventCallback OnDestroy { get; set; }
+    [Parameter]
+    public EventCallback<string> OnError { get; set; }
+    [Parameter]
+    public EventCallback OnFinish { get; set; }
+    [Parameter]
+    public EventCallback OnInteraction { get; set; }
+    [Parameter]
+    public EventCallback<int> OnLoading { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnMute { get; set; }
+    [Parameter]
+    public EventCallback OnPause { get; set; }
+    [Parameter]
+    public EventCallback OnPlay { get; set; }
+    [Parameter]
+    public EventCallback OnReady { get; set; }
+    [Parameter]
+    public EventCallback<object> OnScroll { get; set; }
+    [Parameter]
     public EventCallback<float> OnSeek { get; set; }
+    [Parameter]
+    public EventCallback<int> OnVolume { get; set; }
+    [Parameter]
+    public EventCallback<int> OnZoom { get; set; }
     [Parameter]
     public string? Url { get; set; }
     [Parameter]
@@ -144,21 +168,87 @@
 
     //JS Events
     [JSInvokable]
-    public async Task OnWavesurferReady()
-    {
-        await OnReady.InvokeAsync();
-    }
-
-    [JSInvokable]
     public async Task OnWavesurferAudioProcess(float position)
     {
         await OnAudioProcess.InvokeAsync(position);
     }
 
     [JSInvokable]
+    public async Task OnWavesurferDblClick()
+    {
+        await OnDblClick.InvokeAsync();
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferDestroy()
+    {
+        await OnDestroy.InvokeAsync();
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferError(string errorMessage)
+    {
+        await OnError.InvokeAsync(errorMessage);
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferInteraction()
+    {
+        await OnInteraction.InvokeAsync();
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferLoading(int percent)
+    {
+        await OnLoading.InvokeAsync(percent);
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferMute(bool status)
+    {
+        await OnMute.InvokeAsync(status);
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferPause()
+    {
+        await OnPause.InvokeAsync();
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferPlay()
+    {
+        await OnPlay.InvokeAsync();
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferReady()
+    {
+        await OnReady.InvokeAsync();
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferScroll(object scrollEvent)
+    {
+        await OnScroll.InvokeAsync(scrollEvent);
+    }
+
+    [JSInvokable]
     public async Task OnWavesurferSeek(float seekCoef)
     {
         await OnSeek.InvokeAsync(seekCoef);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferVolume(int volume)
+    {
+        await OnVolume.InvokeAsync(volume);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferZoom(int minPxPerSec)
+    {
+        await OnZoom.InvokeAsync(minPxPerSec);
     }
 
 }
