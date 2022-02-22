@@ -142,7 +142,7 @@
             //starting upon rendering target divs
             if (_interop != null)
             {
-                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, _defaultOptions, Options);
+                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, ShowTimeline, ShowMinimap, _defaultOptions, Options);
 
                 //preload file if URL supplied
                 if (Url != null)
