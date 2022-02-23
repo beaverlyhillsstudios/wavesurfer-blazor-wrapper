@@ -89,50 +89,12 @@
     [Parameter]
     public IEnumerable<WavesurferOption>? Options { get; set; }
 
-    private readonly List<WavesurferOption>? _defaultOptions = new()
+    private readonly List<WavesurferOption> _defaultOptions = new()
     {
         new WavesurferOption(WavesurferOptionKey.normalize, true),
         new WavesurferOption(WavesurferOptionKey.progressColor, "#00629b"),
         new WavesurferOption(WavesurferOptionKey.waveColor, "#428bca")
     };
-
-    //External methods
-    public async Task Load(string url)
-    {
-        if (_interop != null)
-        {
-            var module = await _interop.GetModuleTask();
-            await module.InvokeVoidAsync("load", url);
-        }
-    }
-
-    public async Task PlayPause()
-    {
-        if (_interop != null)
-        {
-            var module = await _interop.GetModuleTask();
-            await module.InvokeVoidAsync("playPause");
-        }
-    }
-
-    public async Task SeekAndCenter(float seek)
-    {
-        if (_interop != null)
-        {
-            var module = await _interop.GetModuleTask();
-            await module.InvokeVoidAsync("seekAndCenter", seek);
-        }
-    }
-
-    public async Task Zoom(int pxPerSec)
-    {
-        _actualZoomLevel = pxPerSec;
-        if (_interop != null)
-        {
-            var module = await _interop.GetModuleTask();
-            await module.InvokeVoidAsync("zoom", pxPerSec);
-        }
-    }
 
     //Internal component methods
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -144,7 +106,7 @@
             {
                 await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, ShowTimeline, ShowMinimap, _defaultOptions, Options);
 
-                //preload file if URL supplied
+                //preload file if URL already supplied
                 if (Url != null)
                 {
                     await Load(Url);
@@ -161,9 +123,248 @@
         _interop = new WavesurferJsInterop(_js, DotNetObjectReference.Create<WavesurferPlayer>(this));
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        
+        if (_interop != null)
+        {
+            var module = await _interop.GetModuleTask();
+            await module.InvokeVoidAsync("destroy");
+        }
+    }
+
+    //Utility methods
+    private async Task CallVoidMethodInterop(string method, params object?[]? args)
+    {
+        if (_interop != null)
+        {
+            var module = await _interop.GetModuleTask();
+            await module.InvokeVoidAsync(method, args);
+        }
+    }
+
+    private async Task<T?> CallMethodInterop<T>(string method, params object?[]? args)
+    {
+        var result = default(T);
+
+        if (_interop != null)
+        {
+            var module = await _interop.GetModuleTask();
+            result = await module.InvokeAsync<T>(method, args);
+        }
+
+        return result;
+    }
+
+    //External methods
+    public async Task CancelAjax()
+    {
+        await CallVoidMethodInterop("cancelAjax");
+    }
+
+    public async Task Empty()
+    {
+        await CallVoidMethodInterop("empty");
+    }
+
+    public async Task<object?> GetActivePlugins()
+    {
+        return await CallMethodInterop<object>("getActivePlugins");
+    }
+
+    public async Task<string?> GetBackgroundColor()
+    {
+        return await CallMethodInterop<string>("getBackgroundColor");
+    }
+
+    public async Task<float?> GetCurrentTime()
+    {
+        return await CallMethodInterop<float>("getCurrentTime");
+    }
+
+    public async Task<string?> GetCursorColor()
+    {
+        return await CallMethodInterop<string>("getCursorColor");
+    }
+
+    public async Task<float?> GetDuration()
+    {
+        return await CallMethodInterop<float>("getDuration");
+    }
+
+    public async Task<float?> GetPlaybackRate()
+    {
+        return await CallMethodInterop<float>("getPlaybackRate");
+    }
+
+    public async Task<string?> GetProgressColor()
+    {
+        return await CallMethodInterop<string>("getProgressColor");
+    }
+
+    public async Task<float?> GetVolume()
+    {
+        return await CallMethodInterop<float>("getVolume");
+    }
+
+    public async Task<bool?> GetMute()
+    {
+        return await CallMethodInterop<bool>("getMute");
+    }
+
+    public async Task<object?> GetFilters()
+    {
+        return await CallMethodInterop<object>("getFilters");
+    }
+
+    public async Task<string?> GetWaveColor()
+    {
+        return await CallMethodInterop<string>("getWaveColor");
+    }
+
+    public async Task<object?> ExportPCM(int? length = null, int? accuracy = null, bool? noWindow = null, int? start = null)
+    {
+        return await CallMethodInterop<object>("exportPCM", length, accuracy, noWindow, start);
+    }
+
+    public async Task<string?> ExportImage(string format, int? quality = null, string? type = null)
+    {
+        return await CallMethodInterop<string>("exportImage", format, quality, type);
+    }
+
+    public async Task<bool?> IsPlaying()
+    {
+        return await CallMethodInterop<bool>("isPlaying");
+    }
+
+    public async Task Load(string url, object? peaks = null, string? preload = null)
+    {
+        await CallVoidMethodInterop("load", url, peaks, preload);
+    }
+
+    public async Task LoadBlob(string url)
+    {
+        await CallVoidMethodInterop("loadBlob", url);
+    }
+
+    public async Task Pause()
+    {
+        await CallVoidMethodInterop("pause");
+    }
+
+    public async Task Play(float? start = null, float? end = null)
+    {
+        await CallVoidMethodInterop("play", start, end);
+    }
+
+    public async Task PlayPause()
+    {
+        await CallVoidMethodInterop("playPause");
+    }
+
+    public async Task SeekAndCenter(float progress)
+    {
+        await CallVoidMethodInterop("seekAndCenter", progress);
+    }
+
+    public async Task SeekTo(float progress)
+    {
+        await CallVoidMethodInterop("seekTo", progress);
+    }
+
+    public async Task SetBackgroundColor(string color)
+    {
+        await CallVoidMethodInterop("setBackgroundColor", color);
+    }
+
+    public async Task SetCursorColor(string color)
+    {
+        await CallVoidMethodInterop("setCursorColor", color);
+    }
+
+    public async Task SetHeight(int height)
+    {
+        await CallVoidMethodInterop("setHeight", height);
+    }
+
+    public async Task SetFilter(object filters)
+    {
+        await CallVoidMethodInterop("setFilter", filters);
+    }
+
+    public async Task SetPlaybackRate(float rate)
+    {
+        await CallVoidMethodInterop("setPlaybackRate", rate);
+    }
+
+    public async Task SetPlayEnd(float position)
+    {
+        await CallVoidMethodInterop("setPlayEnd", position);
+    }
+
+    public async Task SetVolume(float newVolume)
+    {
+        await CallVoidMethodInterop("setVolume", newVolume);
+    }
+
+    public async Task SetMute(bool mute)
+    {
+        await CallVoidMethodInterop("setMute", mute);
+    }
+
+    public async Task SetProgressColor(string color)
+    {
+        await CallVoidMethodInterop("setProgressColor", color);
+    }
+
+    public async Task SetWaveColor(string color)
+    {
+        await CallVoidMethodInterop("setWaveColor", color);
+    }
+
+    public async Task Skip(float offset)
+    {
+        await CallVoidMethodInterop("skip", offset);
+    }
+
+    public async Task SkipBackward()
+    {
+        await CallVoidMethodInterop("skipBackward");
+    }
+
+    public async Task SkipForward()
+    {
+        await CallVoidMethodInterop("skipForward");
+    }
+
+    public async Task SetSinkId(string deviceId)
+    {
+        await CallVoidMethodInterop("setSinkId", deviceId);
+    }
+
+    public async Task Stop()
+    {
+        await CallVoidMethodInterop("stop");
+    }
+
+    public async Task ToggleMute()
+    {
+        await CallVoidMethodInterop("toggleMute");
+    }
+
+    public async Task ToggleInteraction()
+    {
+        await CallVoidMethodInterop("toggleInteraction");
+    }
+
+    public async Task ToggleScroll()
+    {
+        await CallVoidMethodInterop("toggleScroll");
+    }
+
+    public async Task Zoom(int pxPerSec)
+    {
+        _actualZoomLevel = pxPerSec;
+        await CallVoidMethodInterop("zoom", pxPerSec);
     }
 
     //JS Events
