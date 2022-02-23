@@ -11,11 +11,11 @@
 ### Package
 PackageManager
 ```
-Install-Package WavesurferBlazorWrapper -Version 0.0.3
+Install-Package WavesurferBlazorWrapper -Version 0.1.0
 ```
 or .net CLI
 ```
-dotnet add package WavesurferBlazorWrapper --version 0.0.3
+dotnet add package WavesurferBlazorWrapper --version 0.1.0
 ```
 
 ### Javascript
