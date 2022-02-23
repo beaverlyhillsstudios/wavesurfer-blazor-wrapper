@@ -16,7 +16,7 @@ namespace WavesurferBlazorWrapper
             _objRef = objRef;
         }
 
-        public async Task Create(Guid mainDivGuid, Guid timelineDivGuid, Guid minimapDivGuid, bool showTimeLine, bool showMiniMap, IEnumerable<WavesurferOption>? optionsDefault, IEnumerable<WavesurferOption>? optionsUser)
+        public async Task Create(Guid mainDivGuid, Guid timelineDivGuid, Guid minimapDivGuid, bool showTimeLine, bool showMiniMap, IEnumerable<WavesurferOption> optionsDefault, IEnumerable<WavesurferOption>? optionsUser)
         {
             var module = await _moduleTask.Value;
             await module.InvokeVoidAsync("create", _objRef, mainDivGuid, timelineDivGuid, minimapDivGuid, showTimeLine, showMiniMap, WavesurferOptionsService.GetObjectFromRecords(optionsDefault),WavesurferOptionsService.GetObjectFromRecords(optionsUser));

@@ -111,7 +111,7 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
 }
 
 //Wavesurfer methods
-export function cancelAjax()
+export function cancelAjax() {
     wavesurfer.cancelAjax();
 }
 export function destroy() {
