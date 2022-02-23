@@ -52,18 +52,21 @@ namespace WavesurferBlazorWrapper
         waveColor = 40,
         xhr = 41
     }
-    public record WavesurferOption(WavesurferOptionKey key, object value);
+    public record WavesurferOption(WavesurferOptionKey Key, object Value);
 
     public static class WavesurferOptionsService
     {
-        public static object getObjectFromRecords(IEnumerable<WavesurferOption> opts)
+        public static object GetObjectFromRecords(IEnumerable<WavesurferOption>? opts)
         {
             dynamic result = new ExpandoObject();  
             var dictionary = (IDictionary<string, object>)result;
 
-            foreach (var opt in opts)
+            if (opts != null)
             {
-                dictionary.Add(opt.key.ToString(), opt.value);
+                foreach (var opt in opts)
+                {
+                    dictionary.Add(opt.Key.ToString(), opt.Value);
+                }
             }
 
             return result;

@@ -87,9 +87,9 @@
     [Parameter]
     public string TextDefault { get; set; } = "Default";
     [Parameter]
-    public IEnumerable<WavesurferOption> Options { get; set; }
+    public IEnumerable<WavesurferOption>? Options { get; set; }
 
-    private List<WavesurferOption> _defaultOptions = new()
+    private readonly List<WavesurferOption>? _defaultOptions = new()
     {
         new WavesurferOption(WavesurferOptionKey.normalize, true),
         new WavesurferOption(WavesurferOptionKey.progressColor, "#00629b"),
