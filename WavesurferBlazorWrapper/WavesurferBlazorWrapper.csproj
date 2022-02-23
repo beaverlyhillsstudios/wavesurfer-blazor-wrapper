@@ -8,7 +8,7 @@
     <Company />
     <Description>.NET6 Core Blazor component for wrapping up Wavesurfer JS plugin</Description>
     <PackageProjectUrl></PackageProjectUrl>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>BeaverlyHillsStudios</Authors>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
