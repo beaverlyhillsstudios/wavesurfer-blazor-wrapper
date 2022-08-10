@@ -73,6 +73,28 @@
     [Parameter]
     public EventCallback<int> OnZoom { get; set; }
     [Parameter]
+    public EventCallback<object> OnRegionCreated { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionUpdated { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionUpdateEnd { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionRemoved { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionPlay { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionIn { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionOut { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionMouseEnter { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionMouseLeave { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionClick { get; set; }
+    [Parameter]
+    public EventCallback<object> OnRegionDblClick { get; set; }
+    [Parameter]
     public string? Url { get; set; }
     [Parameter]
     public bool ShowDefaultToolbar { get; set; } = false;
@@ -86,6 +108,10 @@
     public string TextZoom { get; set; } = "Zoom";
     [Parameter]
     public string TextDefault { get; set; } = "Default";
+    [Parameter]
+    public float AudioProcessEventThreshold { get; set; } = 0.1f;
+    [Parameter]
+    public bool RegionDragSelection { get; set; } = false;
     [Parameter]
     public IEnumerable<WavesurferOption>? Options { get; set; }
 
@@ -104,7 +130,7 @@
             //starting upon rendering target divs
             if (_interop != null)
             {
-                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, ShowTimeline, ShowMinimap, _defaultOptions, Options);
+                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, ShowTimeline, ShowMinimap, AudioProcessEventThreshold, RegionDragSelection, _defaultOptions, Options);
 
                 //preload file if URL already supplied
                 if (Url != null)
@@ -445,11 +471,76 @@
     {
         await OnVolume.InvokeAsync(volume);
     }
-
+    
     [JSInvokable]
     public async Task OnWavesurferZoom(int minPxPerSec)
     {
         await OnZoom.InvokeAsync(minPxPerSec);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionCreated(object region)
+    {
+        await OnRegionCreated.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionUpdated(object region)
+    {
+        await OnRegionUpdated.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionUpdateEnd(object region)
+    {
+        await OnRegionUpdateEnd.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionRemoved(object region)
+    {
+        await OnRegionRemoved.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionPlay(object region)
+    {
+        await OnRegionPlay.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionIn(object region)
+    {
+        await OnRegionIn.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionOut(object region)
+    {
+        await OnRegionOut.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionMouseEnter(object region)
+    {
+        await OnRegionMouseEnter.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionMouseLeave(object region)
+    {
+        await OnRegionMouseLeave.InvokeAsync(region);
+    }
+
+    [JSInvokable]
+    public async Task OnWavesurferRegionClick(object region)
+    {
+        await OnRegionClick.InvokeAsync(region);
+    }
+    [JSInvokable]
+    public async Task OnWavesurferRegionDblClick(object region)
+    {
+        await OnRegionDblClick.InvokeAsync(region);
     }
 
 }

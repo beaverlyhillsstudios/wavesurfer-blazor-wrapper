@@ -1,13 +1,15 @@
 ﻿var wavesurfer = null;
 
-export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGuid, showTimeLine, showMiniMap, optionsDefault, optionsUser) {
+export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGuid, showTimeLine, showMiniMap, audioThreshold, regionDragSelection, optionsDefault, optionsUser) {
 
+    var lastPosition = 0;
     var options = {};
     Object.assign(options, optionsDefault, optionsUser);
 
     options.container = '#sel_' + mainDivGuid;
     options.plugins = [
         WaveSurfer.regions.create({
+            dragSelection: regionDragSelection
         })
     ];
 
@@ -35,7 +37,10 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
     //WaveSurfer events
     wavesurfer.on('audioprocess',
         function(position) {
-            dotNetHelper.invokeMethodAsync("OnWavesurferAudioProcess", position);
+            if (Math.abs(position - lastPosition) > audioThreshold) {
+                lastPosition = position;
+                dotNetHelper.invokeMethodAsync("OnWavesurferAudioProcess", position);
+            }
         }
     );
     wavesurfer.on('dblclick',
@@ -106,6 +111,61 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
     wavesurfer.on('zoom',
         function(minPxPerSec) {
             dotNetHelper.invokeMethodAsync("OnWavesurferZoom", minPxPerSec);
+        }
+    );
+    wavesurfer.on('region-created',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionCreated", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-updated',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionUpdated", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-update-end',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionUpdateEnd", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-removed',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionRemoved", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-play',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionPlay", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-in',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionIn", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-out',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionOut", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-mouseenter',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionMouseEnter", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-mouseleave',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionMouseLeave", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-click',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionClick", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('region-dblclick',
+        function(region) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferRegionDblClick", getRegionDataOnly(region));
         }
     );
 }
@@ -257,3 +317,19 @@ export function loadRegions(regions) {
     }
 }
 
+//internal functions
+function getRegionDataOnly(regionFull) {
+    return {
+        id: regionFull.id,
+        start: regionFull.start,
+        end: regionFull.end,
+        loop: regionFull.loop,
+        drag: regionFull.drag,
+        resize: regionFull.resize,
+        color: regionFull.color,
+        channelIdx: regionFull.channelIdx,
+        handleStyle: regionFull.handleStyle,
+        preventContextMenu: regionFull.preventContextMenu,
+        showTooltip: regionFull.showTooltip
+    }
+}
