@@ -417,6 +417,12 @@
     {
         await OnError.InvokeAsync(errorMessage);
     }
+
+    [JSInvokable]
+    public async Task OnWavesurferFinish()
+    {
+        await OnFinish.InvokeAsync();
+    }
     
     [JSInvokable]
     public async Task OnWavesurferInteraction()
