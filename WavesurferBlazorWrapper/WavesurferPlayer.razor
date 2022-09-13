@@ -69,7 +69,7 @@
     [Parameter]
     public EventCallback<float> OnSeek { get; set; }
     [Parameter]
-    public EventCallback<int> OnVolume { get; set; }
+    public EventCallback<float> OnVolume { get; set; }
     [Parameter]
     public EventCallback<int> OnZoom { get; set; }
     [Parameter]
@@ -467,7 +467,7 @@
     }
 
     [JSInvokable]
-    public async Task OnWavesurferVolume(int volume)
+    public async Task OnWavesurferVolume(float volume)
     {
         await OnVolume.InvokeAsync(volume);
     }
