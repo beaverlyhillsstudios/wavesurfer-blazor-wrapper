@@ -393,6 +393,21 @@
         await CallVoidMethodInterop("zoom", pxPerSec);
     }
 
+    public async Task<object?> RegionAddRegion(IEnumerable<WavesurferRegionOption>? regionOptions)
+    {
+        return await CallMethodInterop<object>("regionAddRegion", WavesurferRegionOptionsService.GetObjectFromRecords(regionOptions));
+    }
+
+    public async Task RegionClearRegions()
+    {
+        await CallVoidMethodInterop("regionClearRegions");
+    }
+
+    public async Task RegionEnableDragSelection(IEnumerable<WavesurferRegionOption>? regionOptions)
+    {
+        await CallVoidMethodInterop("regionEnableDragSelection", WavesurferRegionOptionsService.GetObjectFromRecords(regionOptions));
+    }
+
     //JS Events
     [JSInvokable]
     public async Task OnWavesurferAudioProcess(float position)

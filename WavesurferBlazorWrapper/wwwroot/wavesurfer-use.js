@@ -300,6 +300,15 @@ export function toggleScroll() {
 export function zoom(pxPerSec) {
     wavesurfer.zoom(pxPerSec);
 }
+export function regionAddRegion(options) {
+    return getRegionDataOnly(wavesurfer.addRegion(options));
+}
+export function regionClearRegions() {
+    wavesurfer.clearRegions();
+}
+export function regionEnableDragSelection(options) {
+    wavesurfer.enableDragSelection(options);
+}
 
 //utility functions
 export function loadRegions(regions) {
