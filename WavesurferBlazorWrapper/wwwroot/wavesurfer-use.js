@@ -306,6 +306,13 @@ export function regionAddRegion(options) {
 export function regionClearRegions() {
     wavesurfer.clearRegions();
 }
+export function regionList() {
+    var regList = [];
+    Object.keys(wavesurfer.regions.list).map((regionId) => {
+        regList.push(getRegionDataOnly(wavesurfer.regions.list[regionId]));
+    });
+    return regList;
+}
 export function regionEnableDragSelection(options) {
     wavesurfer.enableDragSelection(options);
 }
@@ -314,7 +321,6 @@ export function regionEnableDragSelection(options) {
 export function loadRegions(regions) {
     wavesurfer.clearRegions();
     for (var x = 0; x < regions.length; x++) {
-        console.log(regions[x]);
         if(regions[x].word != "silence") {
             wavesurfer.addRegion({
                 start: regions[x].start / 10000000,

@@ -73,27 +73,27 @@
     [Parameter]
     public EventCallback<int> OnZoom { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionCreated { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionCreated { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionUpdated { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionUpdated { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionUpdateEnd { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionUpdateEnd { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionRemoved { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionRemoved { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionPlay { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionPlay { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionIn { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionIn { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionOut { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionOut { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionMouseEnter { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionMouseEnter { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionMouseLeave { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionMouseLeave { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionClick { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionClick { get; set; }
     [Parameter]
-    public EventCallback<object> OnRegionDblClick { get; set; }
+    public EventCallback<WavesurferRegion> OnRegionDblClick { get; set; }
     [Parameter]
     public string? Url { get; set; }
     [Parameter]
@@ -393,9 +393,9 @@
         await CallVoidMethodInterop("zoom", pxPerSec);
     }
 
-    public async Task<object?> RegionAddRegion(IEnumerable<WavesurferRegionOption>? regionOptions)
+    public async Task<WavesurferRegion?> RegionAddRegion(IEnumerable<WavesurferRegionOption>? regionOptions)
     {
-        return await CallMethodInterop<object>("regionAddRegion", WavesurferRegionOptionsService.GetObjectFromRecords(regionOptions));
+        return await CallMethodInterop<WavesurferRegion>("regionAddRegion", WavesurferRegionOptionsService.GetObjectFromRecords(regionOptions));
     }
 
     public async Task RegionClearRegions()
@@ -406,6 +406,11 @@
     public async Task RegionEnableDragSelection(IEnumerable<WavesurferRegionOption>? regionOptions)
     {
         await CallVoidMethodInterop("regionEnableDragSelection", WavesurferRegionOptionsService.GetObjectFromRecords(regionOptions));
+    }
+
+    public async Task<IEnumerable<WavesurferRegion>?> RegionList()
+    {
+        return await CallMethodInterop<IEnumerable<WavesurferRegion>?>("regionList");
     }
 
     //JS Events
@@ -500,66 +505,66 @@
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionCreated(object region)
+    public async Task OnWavesurferRegionCreated(WavesurferRegion region)
     {
         await OnRegionCreated.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionUpdated(object region)
+    public async Task OnWavesurferRegionUpdated(WavesurferRegion region)
     {
         await OnRegionUpdated.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionUpdateEnd(object region)
+    public async Task OnWavesurferRegionUpdateEnd(WavesurferRegion region)
     {
         await OnRegionUpdateEnd.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionRemoved(object region)
+    public async Task OnWavesurferRegionRemoved(WavesurferRegion region)
     {
         await OnRegionRemoved.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionPlay(object region)
+    public async Task OnWavesurferRegionPlay(WavesurferRegion region)
     {
         await OnRegionPlay.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionIn(object region)
+    public async Task OnWavesurferRegionIn(WavesurferRegion region)
     {
         await OnRegionIn.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionOut(object region)
+    public async Task OnWavesurferRegionOut(WavesurferRegion region)
     {
         await OnRegionOut.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionMouseEnter(object region)
+    public async Task OnWavesurferRegionMouseEnter(WavesurferRegion region)
     {
         await OnRegionMouseEnter.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionMouseLeave(object region)
+    public async Task OnWavesurferRegionMouseLeave(WavesurferRegion region)
     {
         await OnRegionMouseLeave.InvokeAsync(region);
     }
 
     [JSInvokable]
-    public async Task OnWavesurferRegionClick(object region)
+    public async Task OnWavesurferRegionClick(WavesurferRegion region)
     {
         await OnRegionClick.InvokeAsync(region);
     }
     [JSInvokable]
-    public async Task OnWavesurferRegionDblClick(object region)
+    public async Task OnWavesurferRegionDblClick(WavesurferRegion region)
     {
         await OnRegionDblClick.InvokeAsync(region);
     }
