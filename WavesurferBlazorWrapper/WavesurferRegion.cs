@@ -11,37 +11,37 @@ namespace WavesurferBlazorWrapper
     public record WavesurferRegion
     {
         [JsonPropertyName("id")]
-        public string Id { get; init; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [JsonPropertyName("start")]
-        public float Start { get; init; } = 0f;
+        public float Start { get; set; } = 0f;
 
         [JsonPropertyName("end")]
-        public float End { get; init; } = 0f;
+        public float End { get; set; } = 0f;
 
         [JsonPropertyName("loop")]
-        public bool? Loop { get; init; }
+        public bool? Loop { get; set; }
 
         [JsonPropertyName("drag")]
-        public bool Drag { get; init; } = true;
+        public bool Drag { get; set; } = true;
 
         [JsonPropertyName("resize")]
-        public bool Resize { get; init; } = true;
+        public bool Resize { get; set; } = true;
 
         [JsonPropertyName("color")]
-        public string Color { get; init; } = "rgba(0,0,0,0.1)";
+        public string Color { get; set; } = "rgba(0,0,0,0.1)";
 
         [JsonPropertyName("channelIdx")]
-        public int? ChannelId { get; init; }
+        public int? ChannelId { get; set; }
 
         [JsonPropertyName("handleStyle")]
-        public JsonElement? HandleStyle { get; init; }
+        public JsonElement? HandleStyle { get; set; }
 
         [JsonPropertyName("preventContextMenu")]
-        public bool? PreventContextMenu { get; init; } = false;
+        public bool? PreventContextMenu { get; set; } = false;
 
         [JsonPropertyName("showTooltip")]
-        public bool ShowTooltip { get; init; } = true;
+        public bool ShowTooltip { get; set; } = true;
     }
 
     public static class WavesurferRegionService
