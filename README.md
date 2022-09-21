@@ -9,11 +9,11 @@
 ### Package
 PackageManager
 ```
-Install-Package WavesurferBlazorWrapper -Version 0.2.1
+Install-Package WavesurferBlazorWrapper -Version 0.2.2
 ```
 or .net CLI
 ```
-dotnet add package WavesurferBlazorWrapper --version 0.2.1
+dotnet add package WavesurferBlazorWrapper --version 0.2.2
 ```
 
 ### Javascript
@@ -64,7 +64,9 @@ E.g. **seek** event via **OnSeek** parameter
 
 New version supports all events from **Regions** plugin with **OnRegion...** prefix.
 
-> Original event documentation: https://wavesurfer-js.org/plugins/regions.html
+Also there is possibility to use Region plugin methods and get list of regions via `Task<IEnumerable<WavesurferRegion>?> RegionList()`.
+
+> Original event and method documentation: https://wavesurfer-js.org/plugins/regions.html
   
 ### Calling methods  
 For calling Wavesurfer methods you need to have ref to your component  
