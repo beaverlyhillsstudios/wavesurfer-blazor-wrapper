@@ -412,6 +412,11 @@
     {
         return await CallMethodInterop<IEnumerable<WavesurferRegion>?>("regionList");
     }
+    
+    public async Task RegionListUpdate(IEnumerable<WavesurferRegion> regionList)
+    {
+        await CallVoidMethodInterop("regionListUpdate", regionList);
+    }
 
     //JS Events
     [JSInvokable]

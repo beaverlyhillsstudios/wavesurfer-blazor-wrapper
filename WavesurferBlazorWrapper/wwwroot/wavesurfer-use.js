@@ -313,6 +313,13 @@ export function regionList() {
     });
     return regList;
 }
+export function regionListUpdate(regionList) {
+    regionList.map((region) => {
+        if(wavesurfer.regions.list[region.id] != null) {
+            wavesurfer.regions.list[region.id].update(region);
+        }
+    });
+}
 export function regionEnableDragSelection(options) {
     wavesurfer.enableDragSelection(options);
 }

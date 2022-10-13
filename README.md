@@ -9,11 +9,11 @@
 ### Package
 PackageManager
 ```
-Install-Package WavesurferBlazorWrapper -Version 0.2.2
+Install-Package WavesurferBlazorWrapper -Version 0.2.3
 ```
 or .net CLI
 ```
-dotnet add package WavesurferBlazorWrapper --version 0.2.2
+dotnet add package WavesurferBlazorWrapper --version 0.2.3
 ```
 
 ### Javascript
@@ -62,9 +62,7 @@ E.g. **seek** event via **OnSeek** parameter
   
 > Original JS event list: https://wavesurfer-js.org/docs/events.html
 
-New version supports all events from **Regions** plugin with **OnRegion...** prefix.
-
-Also there is possibility to use Region plugin methods and get list of regions via `Task<IEnumerable<WavesurferRegion>?> RegionList()`.
+All events from **Regions** plugin with **OnRegion...** prefix are supported.
 
 > Original event and method documentation: https://wavesurfer-js.org/plugins/regions.html
   
@@ -86,3 +84,24 @@ For calling Wavesurfer methods you need to have ref to your component
 }
 ```
 > Original JS method list: https://wavesurfer-js.org/docs/methods.html
+
+#### Region plugin methods
+
+`Task<IEnumerable<WavesurferRegion>?> RegionList()` - retreive all regions
+
+`Task RegionListUpdate(IEnumerable<WavesurferRegion> regionList)` - send changed list back to JS
+
+Example:
+```razor
+//get list
+var regions = await Player?.RegionList();
+
+//make changes to one of regions
+regions.First().Color = "rgba(100,0,0,0.5)";
+regions.First().Start = 90;
+
+//send changes back
+await Player?.RegionListUpdate(regions);
+```
+
+> Original attributes documentation: https://wavesurfer-js.org/plugins/regions.html
