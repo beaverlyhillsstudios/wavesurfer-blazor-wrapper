@@ -95,6 +95,8 @@
     [Parameter]
     public EventCallback<WavesurferRegion> OnRegionDblClick { get; set; }
     [Parameter]
+    public EventCallback<WavesurferMarker> OnMarkerClick { get; set; }
+    [Parameter]
     public string? Url { get; set; }
     [Parameter]
     public bool ShowDefaultToolbar { get; set; } = false;
@@ -102,6 +104,8 @@
     public bool ShowTimeline { get; set; } = true;
     [Parameter]
     public bool ShowMinimap { get; set; } = true;
+    [Parameter]
+    public bool ShowMarkers { get; set; } = true;
     [Parameter]
     public string TextPlayPause { get; set; } = "Play/Pause";
     [Parameter]
@@ -130,7 +134,7 @@
             //starting upon rendering target divs
             if (_interop != null)
             {
-                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, ShowTimeline, ShowMinimap, AudioProcessEventThreshold, RegionDragSelection, _defaultOptions, Options);
+                await _interop.Create(_mainDivGuid, _timelineDivGuid, _minimapDivGuid, ShowTimeline, ShowMinimap, ShowMarkers, AudioProcessEventThreshold, RegionDragSelection, _defaultOptions, Options);
 
                 //preload file if URL already supplied
                 if (Url != null)
@@ -398,6 +402,11 @@
         return await CallMethodInterop<WavesurferRegion>("regionAddRegion", WavesurferRegionOptionsService.GetObjectFromRecords(regionOptions));
     }
 
+    public async Task<WavesurferRegion?> RegionAddRegion(WavesurferRegion regionData)
+    {
+        return await CallMethodInterop<WavesurferRegion>("regionAddRegion", regionData);
+    }
+
     public async Task RegionClearRegions()
     {
         await CallVoidMethodInterop("regionClearRegions");
@@ -416,6 +425,16 @@
     public async Task RegionListUpdate(IEnumerable<WavesurferRegion> regionList)
     {
         await CallVoidMethodInterop("regionListUpdate", regionList);
+    }
+    
+    public async Task<WavesurferMarker?> MarkerAddMarker(WavesurferMarker markerData)
+    {
+        return await CallMethodInterop<WavesurferMarker>("markerAddMarker", markerData);
+    }
+
+    public async Task MarkerClearMarkers()
+    {
+        await CallVoidMethodInterop("markerClearMarkers");
     }
 
     //JS Events
@@ -568,10 +587,17 @@
     {
         await OnRegionClick.InvokeAsync(region);
     }
+    
     [JSInvokable]
     public async Task OnWavesurferRegionDblClick(WavesurferRegion region)
     {
         await OnRegionDblClick.InvokeAsync(region);
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferMarkerClick(WavesurferMarker marker)
+    {
+        await OnMarkerClick.InvokeAsync(marker);
     }
 
 }

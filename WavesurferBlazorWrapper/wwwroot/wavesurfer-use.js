@@ -1,6 +1,6 @@
 ﻿var wavesurfer = null;
 
-export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGuid, showTimeLine, showMiniMap, audioThreshold, regionDragSelection, optionsDefault, optionsUser) {
+export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGuid, showTimeLine, showMiniMap, showMarkers, audioThreshold, regionDragSelection, optionsDefault, optionsUser) {
 
     var lastPosition = 0;
     var options = {};
@@ -29,8 +29,12 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
                 height: 40
             })
         );
-
     }
+    if (showMarkers) {
+        options.plugins.push(
+            WaveSurfer.markers.create({})
+        );
+    }    
 
     wavesurfer = WaveSurfer.create(options);
     
@@ -166,6 +170,11 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
     wavesurfer.on('region-dblclick',
         function(region) {
             dotNetHelper.invokeMethodAsync("OnWavesurferRegionDblClick", getRegionDataOnly(region));
+        }
+    );
+    wavesurfer.on('marker-click',
+        function(marker) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferMarkerClick", getMarkerDataOnly(marker));
         }
     );
 }
@@ -323,6 +332,12 @@ export function regionListUpdate(regionList) {
 export function regionEnableDragSelection(options) {
     wavesurfer.enableDragSelection(options);
 }
+export function markerAddMarker(options) {
+    return getMarkerDataOnly(wavesurfer.addMarker(options));
+}
+export function markerClearMarkers() {
+    wavesurfer.clearMarkers();
+}
 
 //utility functions
 export function loadRegions(regions) {
@@ -355,3 +370,13 @@ function getRegionDataOnly(regionFull) {
         showTooltip: regionFull.showTooltip
     }
 }
+
+function getMarkerDataOnly(markerFull) {
+    return {
+        time: markerFull.time,
+        label: markerFull.label,
+        color: markerFull.color,
+        position: markerFull.position
+    }
+}
+

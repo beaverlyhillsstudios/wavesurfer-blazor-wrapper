@@ -43,12 +43,4 @@ namespace WavesurferBlazorWrapper
         [JsonPropertyName("showTooltip")]
         public bool ShowTooltip { get; set; } = true;
     }
-
-    public static class WavesurferRegionService
-    {
-        public static WavesurferRegion? ConvertFromJS(JsonElement region)
-        {
-            return JsonSerializer.Deserialize<WavesurferRegion>(region);
-        }
-    }
 }

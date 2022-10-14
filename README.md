@@ -4,16 +4,18 @@
 
 .NET6 Core wrapper around JS library: wavesurfer.js by **katspaugh** (https://wavesurfer-js.org/)
 
+> Actual verios of included wavesurfer.js: 6.3.0
+
 ## Installation
 
 ### Package
 PackageManager
 ```
-Install-Package WavesurferBlazorWrapper -Version 0.2.3
+Install-Package WavesurferBlazorWrapper -Version 0.3.0
 ```
 or .net CLI
 ```
-dotnet add package WavesurferBlazorWrapper --version 0.2.3
+dotnet add package WavesurferBlazorWrapper --version 0.3.0
 ```
 
 ### Javascript
