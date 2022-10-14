@@ -4,7 +4,7 @@
 
 .NET6 Core wrapper around JS library: wavesurfer.js by **katspaugh** (https://wavesurfer-js.org/)
 
-> Actual verios of included wavesurfer.js: 6.3.0
+> Actual version of included wavesurfer.js: 6.3.0
 
 ## Installation
 
