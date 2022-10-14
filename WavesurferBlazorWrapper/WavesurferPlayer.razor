@@ -97,6 +97,10 @@
     [Parameter]
     public EventCallback<WavesurferMarker> OnMarkerClick { get; set; }
     [Parameter]
+    public EventCallback<WavesurferMarker> OnMarkerDrag { get; set; }
+    [Parameter]
+    public EventCallback<WavesurferMarker> OnMarkerDrop { get; set; }
+    [Parameter]
     public string? Url { get; set; }
     [Parameter]
     public bool ShowDefaultToolbar { get; set; } = false;
@@ -599,6 +603,18 @@
     {
         await OnMarkerClick.InvokeAsync(marker);
     }
+    
+    [JSInvokable]
+    public async Task OnWavesurferMarkerDrag(WavesurferMarker marker)
+    {
+        await OnMarkerDrag.InvokeAsync(marker);
+    }
+    
+    [JSInvokable]
+    public async Task OnWavesurferMarkerDrop(WavesurferMarker marker)
+    {
+        await OnMarkerDrop.InvokeAsync(marker);
+    }    
 
 }
 

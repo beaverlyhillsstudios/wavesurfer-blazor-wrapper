@@ -177,6 +177,16 @@ export function create(dotNetHelper, mainDivGuid, timelineDivGuid, minimapDivGui
             dotNetHelper.invokeMethodAsync("OnWavesurferMarkerClick", getMarkerDataOnly(marker));
         }
     );
+    wavesurfer.on('marker-drag',
+        function(marker) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferMarkerDrag", getMarkerDataOnly(marker));
+        }
+    );
+    wavesurfer.on('marker-drop',
+        function(marker) {
+            dotNetHelper.invokeMethodAsync("OnWavesurferMarkerDrop", getMarkerDataOnly(marker));
+        }
+    );
 }
 
 //Wavesurfer methods
@@ -376,7 +386,11 @@ function getMarkerDataOnly(markerFull) {
         time: markerFull.time,
         label: markerFull.label,
         color: markerFull.color,
-        position: markerFull.position
+        position: markerFull.position,
+        markerElement: markerFull.markerElement,
+        draggable: markerFull.draggable,
+        tooltip: markerFull.tooltip,
+        preventContextMenu: markerFull.preventContextMenu
     }
 }
 

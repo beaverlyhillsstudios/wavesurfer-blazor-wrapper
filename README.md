@@ -70,13 +70,13 @@ E.g. **seek** event via **OnSeek** parameter
 
 #### Regions plugin
 
-All events from **Regions** plugin with **OnRegion...** prefix are supported.
+All events from **Regions** plugin with **OnRegion...** prefix are supported, returning `WavesurferRegion` object.
 
 > Original event and method documentation: https://wavesurfer-js.org/plugins/regions.html
 
 #### Markers plugin
 
-`OnMarkerClick` event is supported, returning `WavesurferMarker` object
+All events from **Markers** plugin with **OnMarker...** prefix are supported, returning `WavesurferMarker` object.
 
 > Original event and method documentation: https://wavesurfer-js.org/plugins/markers.html
   
