@@ -339,9 +339,19 @@ export function regionListUpdate(regionList) {
         }
     });
 }
+export function regionPlay(regionId) {
+    if(wavesurfer.regions.list[regionId] != null) {
+        wavesurfer.regions.list[regionId].play();
+    }
+}
 export function regionPlayLoop(regionId) {
     if(wavesurfer.regions.list[regionId] != null) {
         wavesurfer.regions.list[regionId].playLoop();
+    }
+}
+export function regionRemove(regionId) {
+    if(wavesurfer.regions.list[regionId] != null) {
+        wavesurfer.regions.list[regionId].remove();
     }
 }
 export function regionEnableDragSelection(options) {

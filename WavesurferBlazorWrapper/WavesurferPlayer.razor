@@ -431,9 +431,19 @@
         await CallVoidMethodInterop("regionListUpdate", regionList);
     }
     
+    public async Task RegionPlay(string regionId)
+    {
+        await CallVoidMethodInterop("regionPlay", regionId);
+    }    
+    
     public async Task RegionPlayLoop(string regionId)
     {
         await CallVoidMethodInterop("regionPlayLoop", regionId);
+    }
+    
+    public async Task RegionRemove(string regionId)
+    {
+        await CallVoidMethodInterop("regionRemove", regionId);
     }
 
     public async Task<WavesurferMarker?> MarkerAddMarker(WavesurferMarker markerData)

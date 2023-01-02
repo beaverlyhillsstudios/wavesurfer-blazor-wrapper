@@ -11,11 +11,11 @@
 ### Package
 PackageManager
 ```
-Install-Package WavesurferBlazorWrapper -Version 0.3.1
+Install-Package WavesurferBlazorWrapper -Version 0.4.0
 ```
 or .net CLI
 ```
-dotnet add package WavesurferBlazorWrapper --version 0.3.1
+dotnet add package WavesurferBlazorWrapper --version 0.4.0
 ```
 
 ### Javascript
@@ -111,6 +111,12 @@ For calling Wavesurfer methods you need to have ref to your component
 
 `Task RegionEnableDragSelection(IEnumerable<WavesurferRegionOption>? regionOptions)`
 
+`Task RegionPlay(string regionId)`
+
+`Task RegionPlayLoop(string regionId)`
+
+`Task RegionRemove(string regionId)`
+
 Example:
 ```razor
 //add new region - actual non-deprecated way
@@ -129,7 +135,7 @@ await Player?.RegionAddRegion(
 
 `Task<IEnumerable<WavesurferRegion>?> RegionList()` - retreive all regions, replacement for direct access to JS list
 
-`Task RegionListUpdate(IEnumerable<WavesurferRegion> regionList)` - send changed list back to JS
+`Task RegionListUpdate(IEnumerable<WavesurferRegion> regionList)` - send changed list back to JS, removal can be done via RegionRemove method
 
 Example:
 ```razor
@@ -163,7 +169,8 @@ var marker = await Player?.MarkerAddMarker(new WavesurferMarker()
     Color = "rgba(10,20,200,0.8)",
     Label = "Test",
     Time = 250,
-    Position = "top"
+    Position = "top",
+    Draggable = true
 });
 ```
 
