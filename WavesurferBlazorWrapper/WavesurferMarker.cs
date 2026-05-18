@@ -15,16 +15,16 @@ namespace WavesurferBlazorWrapper
         public float Time { get; set; } = 0f;
 
         [JsonPropertyName("label")]
-        public string Label { get; set; }
+        public string Label { get; set; } = string.Empty;
 
         [JsonPropertyName("color")]
         public string Color { get; set; } = "rgba(0,0,0,0.1)";
         
         [JsonPropertyName("position")]
-        public string Position { get; set; }
+        public string Position { get; set; } = "top";
 
         [JsonPropertyName("tooltip")]
-        public string Tooltip { get; set; }
+        public string Tooltip { get; set; } = string.Empty;
         
         [JsonPropertyName("markerElement")]
         public ElementReference? MarkerElement { get; set; }

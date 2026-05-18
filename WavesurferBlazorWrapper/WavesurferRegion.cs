@@ -31,6 +31,9 @@ namespace WavesurferBlazorWrapper
         [JsonPropertyName("color")]
         public string Color { get; set; } = "rgba(0,0,0,0.1)";
 
+        [JsonPropertyName("content")]
+        public string? Content { get; set; }
+
         [JsonPropertyName("channelIdx")]
         public int? ChannelId { get; set; }
 

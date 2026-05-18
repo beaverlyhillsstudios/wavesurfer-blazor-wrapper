@@ -50,7 +50,18 @@ namespace WavesurferBlazorWrapper
         splitChannels = 38,
         splitChannelsOptions = 39,
         waveColor = 40,
-        xhr = 41
+        xhr = 41,
+        autoScroll = 42,
+        blobMimeType = 43,
+        cspNonce = 44,
+        dragToSeek = 45,
+        duration = 46,
+        fetchParams = 47,
+        media = 48,
+        peaks = 49,
+        sampleRate = 50,
+        url = 51,
+        width = 52
     }
     public record WavesurferOption(WavesurferOptionKey Key, object Value);
 

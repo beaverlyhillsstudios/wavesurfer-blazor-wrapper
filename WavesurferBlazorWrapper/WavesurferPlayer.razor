@@ -1,4 +1,5 @@
 ﻿@using Microsoft.JSInterop;
+@implements IAsyncDisposable
 @inject IJSRuntime _js
 
 <div class="wavesurfer-ui-container">
@@ -162,7 +163,8 @@
         if (_interop != null)
         {
             var module = await _interop.GetModuleTask();
-            await module.InvokeVoidAsync("destroy");
+            await module.InvokeVoidAsync("destroy", _mainDivGuid);
+            await _interop.DisposeAsync();
         }
     }
 
@@ -172,7 +174,7 @@
         if (_interop != null)
         {
             var module = await _interop.GetModuleTask();
-            await module.InvokeVoidAsync(method, args);
+            await module.InvokeVoidAsync(method, new object?[] { _mainDivGuid }.Concat(args ?? Array.Empty<object?>()).ToArray());
         }
     }
 
@@ -183,7 +185,7 @@
         if (_interop != null)
         {
             var module = await _interop.GetModuleTask();
-            result = await module.InvokeAsync<T>(method, args);
+            result = await module.InvokeAsync<T>(method, new object?[] { _mainDivGuid }.Concat(args ?? Array.Empty<object?>()).ToArray());
         }
 
         return result;
@@ -255,9 +257,15 @@
         return await CallMethodInterop<string>("getWaveColor");
     }
 
+    [Obsolete("wavesurfer.js v7 replaced exportPCM with exportPeaks. Use ExportPeaks instead.")]
     public async Task<object?> ExportPCM(int? length = null, int? accuracy = null, bool? noWindow = null, int? start = null)
     {
         return await CallMethodInterop<object>("exportPCM", length, accuracy, noWindow, start);
+    }
+
+    public async Task<float[][]?> ExportPeaks(int? channels = null, int? maxLength = null, int? precision = null)
+    {
+        return await CallMethodInterop<float[][]>("exportPeaks", channels, maxLength, precision);
     }
 
     public async Task<string?> ExportImage(string format, int? quality = null, string? type = null)
