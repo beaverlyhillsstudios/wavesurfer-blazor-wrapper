@@ -15,13 +15,13 @@ Supported target frameworks: .NET 8, .NET 9, and .NET 10.
 Package Manager:
 
 ```powershell
-Install-Package WavesurferBlazorWrapper -Version 0.5.0
+Install-Package WavesurferBlazorWrapper -Version 0.5.1
 ```
 
 .NET CLI:
 
 ```powershell
-dotnet add package WavesurferBlazorWrapper --version 0.5.0
+dotnet add package WavesurferBlazorWrapper --version 0.5.1
 ```
 
 ### JavaScript
